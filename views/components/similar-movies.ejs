@@ -1,0 +1,16 @@
+<section class="movie-info-similar">
+  <h2>Similar movies</h2>
+  <div class="movie-info-similar_list">
+    <% similar.filter(movie=> movie.backdrop_path !==
+    null).slice(0,4).forEach(re => { %>
+    <div>
+      <img
+        src="https://image.tmdb.org/t/p/w500<%=re.backdrop_path %>"
+        alt=""
+        class="lozad"
+      />
+      <a href="/movies/movie/<%=re.id%>"><%=re.title%></a>
+    </div>
+    <% }) %>
+  </div>
+</section>

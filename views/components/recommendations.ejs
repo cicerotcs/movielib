@@ -1,0 +1,16 @@
+<section class="movie-info-recommendations">
+  <h2>Top recommendations</h2>
+  <div class="movie-info-recommendations_list">
+    <% recommendations.filter(movie=> movie.backdrop_path !==
+    null).slice(0,4).forEach(re => { %>
+    <div>
+      <img
+        src="https://image.tmdb.org/t/p/w500<%=re.backdrop_path %>"
+        alt=""
+        class="lozad"
+      />
+      <a href="/movies/movie/<%=re.id%>"><%=re.title%></a>
+    </div>
+    <% }) %>
+  </div>
+</section>

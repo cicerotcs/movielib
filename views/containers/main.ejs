@@ -1,0 +1,58 @@
+<div class="hero">
+  <div class="hero-banner-container">
+    <div class="hero-banner-img">
+      <div class="hero-banner-info">
+        <h3 class="movie-banner-title"></h3>
+        <p class="movie-banner-plot"></p>
+      </div>
+    </div>
+  </div>
+  <h3>Now playing in cinemas:</h3>
+  <section class="hero-movies">
+    <% movies.forEach(movie => { %>
+    <div class="hero-movie">
+      <img
+        src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>"
+        alt=""
+      />
+      <a href="/movies/movie/<%= movie.id %>"><%= movie.title %></a>
+    </div>
+
+    <% }) %>
+  </section>
+</div>
+
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
+></script>
+
+<script>
+
+  const observer = lozad();
+  observer.observe();
+
+  const heroBannerImg = document.querySelector(".hero-banner-img")
+  const movieBannerTitle = document.querySelector(".movie-banner-title")
+  const movieBannerPlot = document.querySelector(".movie-banner-plot")
+
+  const nowPlaying = <%- JSON.stringify(movies) %>;
+
+  const backgroundImageUrl = 'https://image.tmdb.org/t/p/w1280'
+
+  heroBannerImg.style.backgroundImage = `url(${backgroundImageUrl}${nowPlaying[0].backdrop_path})`
+  movieBannerTitle.textContent = nowPlaying[0].title
+  movieBannerPlot.textContent = nowPlaying[0].overview
+
+
+  function generateRandomIndex(){
+    return randomIndex = Math.floor(Math.random() * nowPlaying.length + 1 )
+  }
+
+  setInterval(() => {
+    let index = generateRandomIndex()
+    heroBannerImg.style.backgroundImage = `url(${backgroundImageUrl}${nowPlaying[index].backdrop_path})`
+    movieBannerTitle.textContent = nowPlaying[index].title
+    movieBannerPlot.textContent = nowPlaying[index].overview
+  }, 8000)
+</script>

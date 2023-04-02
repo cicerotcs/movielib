@@ -1,0 +1,39 @@
+<section class="signup">
+  <h2>Signup</h2>
+  <form name="signup">
+    <input type="text" name="username" placeholder="username" />
+    <input type="text" name="email" placeholder="email" />
+    <input type="password" name="password" placeholder="password" />
+    <button class="submit-btn" type="submit">Register</button>
+  </form>
+  <p class="message" style="color: white"></p>
+</section>
+
+<script>
+  const form = document.forms.signup;
+  const { username, email, password } = form.elements;
+  const message = document.querySelector(".message");
+
+  const handleSignup = async (event) => {
+    event.preventDefault();
+    try {
+      const { data } = await axios.post("/signup", {
+        username: username.value,
+        email: email.value,
+        password: password.value,
+      });
+      message.textContent = data.msg;
+      setTimeout(() => {
+        location.replace("/");
+      }, 2000);
+    } catch (err) {
+      message.textContent = err.response.data.msg;
+    }
+
+    setTimeout(() => {
+      message.textContent = "";
+    }, 3000);
+  };
+
+  form.addEventListener("submit", handleSignup);
+</script>

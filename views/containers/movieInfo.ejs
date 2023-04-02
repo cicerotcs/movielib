@@ -1,0 +1,152 @@
+<section class="movie-info">
+  <div class="movie-info-banner">
+    <div class="movie-info-poster">
+      <img
+        src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>"
+        alt=""
+        class="lozad"
+      />
+    </div>
+    <div class="movie-info-details">
+      <h1>
+        <%= movie.title %>
+        <span>(<%= movie.release_date.slice(0,4) %>)</span>
+      </h1>
+      <div>
+        <% movie.genres.forEach(m => { %>
+        <span class="movie-info-genres"><%= m.name %></span> <% }) %>
+        <span class="dot">.</span>
+        <span class="movie-info-duration"></span>
+      </div>
+      <div class="watchlist">
+        <span class="watchlist-btn"
+          ><img src="../../assets/images/bookmark.png" alt="" class="lozad"
+        /></span>
+      </div>
+      <div class="movie-info-overview">
+        <h3>Overview</h3>
+        <p>
+          <%= movie.overview.length > 450 ? movie.overview.slice(0,450) + '...'
+          : movie.overview %>
+        </p>
+      </div>
+      <div class="movie-info-directors">
+        <div class="movie-info-director">
+          <p></p>
+          <span>Director</span>
+        </div>
+        <div class="movie-info-writer">
+          <p></p>
+          <span>Writer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="movie-info-status">
+    <div>
+      <p>Status</p>
+      <span><%= movie.status %></span>
+    </div>
+    <div>
+      <p>Original Language</p>
+      <span
+        ><%= movie.original_language === 'en' ? 'English' :
+        movie.original_language %></span
+      >
+    </div>
+    <div>
+      <p>Budget</p>
+      <span class="movie-budget"></span>
+    </div>
+    <div>
+      <p>Revenue</p>
+      <span class="movie-revenue"></span>
+    </div>
+  </section>
+  <%- include('../components/recommendations', {recommendations}); %> <%-
+  include('../components/similar-movies', {similar}); %>
+</section>
+
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const observer = lozad();
+  observer.observe();
+
+  const movieInfoBanner = document.querySelector(".movie-info-banner");
+  const movieInfoDuration = document.querySelector(".movie-info-duration")
+  const movieBudget = document.querySelector(".movie-budget")
+  const movieRevenue = document.querySelector(".movie-revenue")
+  const movieInfoDirector = document.querySelector(".movie-info-director p")
+  const movieInfoWriter = document.querySelector(".movie-info-writer p")
+  const watchlistBtn = document.querySelector(".watchlist-btn")
+
+
+  const backgroundImageUrl = 'https://image.tmdb.org/t/p/w1280'
+
+  const movie = <%- JSON.stringify(movie) %>;
+  const crew = <%- JSON.stringify(crew) %>;
+  const user = <%- JSON.stringify(user) %>;
+
+  const director = crew.find(item => item.job === 'Director')
+  const writers = crew.filter(item => item.department === 'Writing');
+
+  const duration = movie.runtime
+  const hours = Math.floor(duration / 60)
+  const minutes = duration % 60;
+
+  function formatNumber(num){
+    return num.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    })
+
+  }
+
+  async function getWatchlist(){
+    if(Object.keys(user).length !== 0){
+      const {data} = await axios.get("/movies/save")
+    data.forEach(watchListed => {
+      if(watchListed.movie_id === movie.id){
+        watchlistBtn.style= "background-color: red; pointer-events: none"
+      }
+    })
+  }
+  }
+
+
+  async function handleWatchlistBtn(event){
+    if(Object.keys(user).length === 0){
+      location.replace("/signin")
+    }
+    const btn = event.target.closest(".watchlist-btn")
+    btn.style = "background-color: red; pointer-events: none"
+    try{
+      await axios.post("/movies/save", {
+        movie_id: movie.id,
+        title: movie.title,
+        overview: movie.overview,
+        poster_path: movie.poster_path
+      })
+
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  watchlistBtn.addEventListener("click", handleWatchlistBtn)
+
+  movieInfoBanner.style.backgroundImage = `url(${backgroundImageUrl}${movie.backdrop_path})`
+  movieInfoDuration.textContent = `${hours}h ${minutes}m`
+  movieBudget.textContent = `${movie.budget === 0 ? "Unknown" : formatNumber(movie.budget)}`
+  movieRevenue.textContent = `${movie.revenue == 0 ? "Unknown" : formatNumber(movie.revenue)}`
+  movieInfoDirector.textContent = director.name
+  movieInfoWriter.textContent = writers[0].name
+
+  getWatchlist()
+</script>

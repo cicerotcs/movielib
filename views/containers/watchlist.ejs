@@ -1,0 +1,45 @@
+<div class="movies-result">
+  <h2>My watchlist:</h2>
+  <% if(movies.length === 0){ %>
+  <h4>Your watchlist is empty.</h4>
+  <% } %> <% movies.filter(m => m.poster_path !== null).forEach(movie => { %>
+  <div class="movies-result-wrapper">
+    <img
+      src="https://image.tmdb.org/t/p/w500<%=movie.poster_path %>"
+      alt=""
+      class="lozad"
+    />
+    <div class="movies-result-info">
+      <a href="/movies/movie/<%= movie.movie_id %>"><%= movie.title %></a>
+
+      <p>
+        <%= movie.overview.length > 350 ? movie.overview.slice(0,350) + '...' :
+        movie.overview %>
+      </p>
+      <button class="watchlist-remove" data-movieid="<%= movie.movie_id%>">
+        Remove
+      </button>
+    </div>
+  </div>
+  <% }) %>
+</div>
+
+<script>
+  const watchlistRemove = document.querySelectorAll(".watchlist-remove");
+
+  const movies = <%- JSON.stringify(movies) %>
+
+  async function handleRemove(event) {
+    const movieWrapper = event.target.closest(".movies-result-wrapper")
+    movieWrapper.remove()
+    const movieId = event.target.dataset.movieid
+    const movie = movies.find(m => m.movie_id === Number(movieId) )
+    const userId = movie.user_id
+
+    await axios.delete(`/watchlist/${movieId}`, { data: { userId } })
+  }
+
+  watchlistRemove.forEach((btn) => {
+    btn.addEventListener("click", handleRemove);
+  });
+</script>

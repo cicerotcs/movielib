@@ -1,0 +1,36 @@
+<section class="signin">
+  <h2>Signin</h2>
+  <form name="signin">
+    <input type="text" name="username" placeholder="username" />
+    <input type="password" name="password" placeholder="password" />
+    <button type="submit">Login</button>
+  </form>
+  <p class="message" style="color: white"></p>
+</section>
+
+<script>
+  const form = document.forms.signin;
+  const { username, password } = form.elements;
+  const message = document.querySelector(".message");
+
+  const handleSignin = async (event) => {
+    event.preventDefault();
+    try {
+      const { data } = await axios.post("/signin", {
+        username: username.value,
+        password: password.value,
+      });
+      message.textContent = data.msg;
+      setTimeout(() => {
+        location.replace("/");
+      }, 2000);
+    } catch (err) {
+      message.textContent = err.response.data.msg;
+    }
+    setTimeout(() => {
+      message.textContent = "";
+    }, 3000);
+  };
+
+  form.addEventListener("submit", handleSignin);
+</script>

@@ -1,0 +1,68 @@
+<div class="movies-result">
+  <% if(movies.results.length === 0){ %>
+  <h4>We're sorry, but we couldn't find any movies.</h4>
+  <% } %> <% movies.results.filter(m => m.poster_path !== null).forEach(movie =>
+  { %>
+  <div class="movies-result-wrapper">
+    <img
+      src="https://image.tmdb.org/t/p/w500<%=movie.poster_path %>"
+      alt=""
+      class="lozad"
+    />
+    <div class="movies-result-info">
+      <a href="/movies/movie/<%= movie.id %>"><%= movie.title %></a>
+      <small><%= movie.release_date %></small>
+      <p>
+        <%= movie.overview.length > 350 ? movie.overview.slice(0,350) + '...' :
+        movie.overview %>
+      </p>
+    </div>
+  </div>
+  <% }) %>
+  <button class="prev-page">Prev</button>
+  <button class="next-page">Next</button>
+</div>
+
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
+></script>
+
+<script>
+  const observer = lozad();
+  observer.observe();
+
+  const nextPage = document.querySelector(".next-page")
+  const prevPage = document.querySelector(".prev-page")
+
+  let currentPage = <%- JSON.stringify(page) %>;
+
+  const result = <%- JSON.stringify(movies) %>;
+
+
+  if(currentPage == 1){
+    prevPage.style = "display:none"
+  }
+  if(currentPage == result.total_pages){
+    nextPage.style = "display:none"
+  }
+
+  let query = null
+
+  <% if(typeof input !== 'undefined'){ %>
+    query = `?q=${<%- JSON.stringify(input) %>}&page=`
+  <% }else{ %>
+    query = `?page=`
+  <% } %>
+
+
+  nextPage.addEventListener("click", () => {
+    currentPage++
+    location.href= query + currentPage
+  })
+
+  prevPage.addEventListener("click", () => {
+    currentPage--
+    location.href= query + currentPage
+  })
+</script>

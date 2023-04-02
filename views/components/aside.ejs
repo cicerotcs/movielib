@@ -1,0 +1,174 @@
+<div class="aside-open">
+  <div class="aside-logo">
+    <span class="logo">MOVIELIB</span>
+    <img src="/assets/images/close.png" alt="" class="close" />
+  </div>
+  <div class="horizontal-line"></div>
+  <div class="aside-categories">
+    <span>Categories</span>
+    <ul class="categoriesUl"></ul>
+  </div>
+  <div class="horizontal-line"></div>
+  <div class="genres">
+    <span>Genres</span>
+    <ul class="genresUl"></ul>
+  </div>
+</div>
+
+<div class="aside-close">
+  <img src="/assets/images/more.png" alt="" class="more" />
+</div>
+
+<script>
+  const genresUl = document.querySelector(".genresUl");
+  const categoriesUl = document.querySelector(".categoriesUl");
+
+  const closeBtn = document.querySelector(".close");
+  const openBtn = document.querySelector(".open");
+  const asideOpen = document.querySelector(".aside-open");
+  const asideClose = document.querySelector(".aside-close");
+  const aside = document.querySelector("aside");
+
+  closeBtn.addEventListener("click", handleCloseMenu);
+
+  function handleCloseMenu() {
+    asideOpen.style = "display:none";
+    asideClose.style = "display:block";
+    aside.style = "width: 50px; flex:0";
+  }
+
+  aside.addEventListener("click", handleOpenMenu);
+
+  function handleOpenMenu(event) {
+    const more = event.target.closest(".aside-close");
+    if (more) {
+      asideOpen.style = "display:block";
+      asideClose.style = "display:none";
+      aside.style = "flex:1; background-color:#2e3849; min-height: 100vh";
+    }
+  }
+
+  const categories = [
+    {
+      name: "Popular",
+      img: "../assets/images/categories/trending.png",
+    },
+    {
+      name: "Top Rated",
+      img: "../assets/images/categories/top-rated.png",
+    },
+    {
+      name: "Upcoming",
+      img: "../assets/images/categories/upcoming.png",
+    },
+  ];
+
+  const genres = [
+    {
+      id: 28,
+      name: "Action",
+      img: "../assets/images/genres/action.png",
+    },
+    {
+      id: 12,
+      name: "Adventure",
+      img: "../assets/images/genres/adventure.png",
+    },
+    {
+      id: 16,
+      name: "Animation",
+      img: "../assets/images/genres/animation.png",
+    },
+    {
+      id: 35,
+      name: "Comedy",
+      img: "../assets/images/genres/comedy.png",
+    },
+    {
+      id: 80,
+      name: "Crime",
+      img: "../assets/images/genres/crime.png",
+    },
+    {
+      id: 99,
+      name: "Documentary",
+      img: "../assets/images/genres/documentary.png",
+    },
+    {
+      id: 18,
+      name: "Drama",
+      img: "../assets/images/genres/drama.png",
+    },
+    {
+      id: 10751,
+      name: "Family",
+      img: "../assets/images/genres/family.png",
+    },
+    {
+      id: 14,
+      name: "Fantasy",
+      img: "../assets/images/genres/fantasy.png",
+    },
+    {
+      id: 36,
+      name: "History",
+      img: "../assets/images/genres/history.png",
+    },
+    {
+      id: 27,
+      name: "Horror",
+      img: "../assets/images/genres/horror.png",
+    },
+    {
+      id: 10402,
+      name: "Musical",
+      img: "../assets/images/genres/musical.png",
+    },
+    {
+      id: 9648,
+      name: "Mystery",
+      img: "../assets/images/genres/mystery.png",
+    },
+    {
+      id: 10749,
+      name: "Romance",
+      img: "../assets/images/genres/romance.png",
+    },
+    {
+      id: 878,
+      name: "Science Fiction",
+      img: "../assets/images/genres/science-fiction.png",
+    },
+    {
+      id: 53,
+      name: "Thriller",
+      img: "../assets/images/genres/thriller.png",
+    },
+    {
+      id: 10752,
+      name: "War",
+      img: "../assets/images/genres/war.png",
+    },
+    {
+      id: 37,
+      name: "Western",
+      img: "../assets/images/genres/western.png",
+    },
+  ];
+
+  genres.forEach((genre) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<img src=/${genre.img} alt=""><a href=/movies/genre/${genre.id}?page=1>${genre.name}</a>`;
+    genresUl.append(li);
+  });
+
+  categories.forEach((category) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<img src=/${
+      category.img
+    } alt=""><a href=/movies/${category.name
+      .replace(" ", "_")
+      .toLocaleLowerCase()}?page=1>${category.name}</a>`;
+    categoriesUl.append(li);
+  });
+</script>

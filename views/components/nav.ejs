@@ -1,0 +1,21 @@
+<nav class="nav">
+  <div class="searchbar">
+    <form action="/movies/search">
+      <div class="input-container">
+        <input type="text" name="q" />
+        <input type="hidden" name="page" value="1" />
+        <img src="/assets/images/search-interface-symbol.png" alt="" />
+      </div>
+    </form>
+  </div>
+  <div class="auth">
+    <% if(Object.keys(user).length === 0){ %>
+    <a href="/signin">login</a>
+    <img src="/assets/images/user-interface.png" alt="" />
+    <% } else { %>
+    <p class="nav-username">Hi, <%= user.username %></p>
+    <a class="nav-dashboard" href="/dashboard"> DASHBOARD</a>
+
+    <% } %>
+  </div>
+</nav>
