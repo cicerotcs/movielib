@@ -11,8 +11,9 @@ CREATE TABLE users(
 CREATE TABLE watchlist(
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
-    title VARCHAR(255),
-    poster_path TEXT,
-    overview TEXT
+    title VARCHAR(255) NOT NULL,
+    poster_path TEXT NOT NULL,
+    overview TEXT NOT NULL,
+    movie_id INTEGER NOT NULL
 );
 
